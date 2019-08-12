@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Meu chat Bonitão</title>        
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-size: 14px; font-family: Helvetica, Arial; }
+            form { background: #212121; padding: 3px; position: fixed; bottom: 0; width: 100% }
+            form .message { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+            form .name { border: 0; margin-bottom: 3px; }
+            form .name input { border: 0; padding: 10px; height: 15px; width: 180px; }
+            form button { width: 9%; background: red; color: #fff; border: none; padding: 10px; }
+            #messages { list-style-type: none; margin: 0; padding: 0; }
+            #messages li { display: flex; padding: 5px 10px; flex-direction: row; align-items: center; }
+            #messages li small { margin-left: auto; }
+            #messages li:nth-child(odd) { background: #ccc; }
+        </style>
+    </head>
+    <body>
+        <ul id="messages"></ul>
+        <form action="">
+            <div class="name">
+                <input type="text" autocomplete="off" id="name"/>
+            </div>
+            <div>
+                <input class="message" type="text" autocomplete="off" id="message"/>
+                <button>Enviar</button>
+            </div>
+        </form>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+            $(function () {
+                var socket = io();
+                $('form').submit(function(e) {
+                    e.preventDefault();
+                    var name = $('#name').val();
+                    var message = $('#message').val();
+                    socket.emit('new message', { 
+                        name: name, 
+                        message: message,
+                        date: new Date(),
+                    });
+                    $('#message').val('');
+                    return false;
+                });
+                socket.on('new message', function(message) {
+                    var messageItem = $('<li/>').text(message.name + ': ' + message.message);
+                    // Formatação avançada de data:
+                    var formatedDate = message.date.split('T').pop().split('.').shift();
+                    var messageDate = $('<small/>').text(formatedDate);
+                    messageItem.append(messageDate);
+                    $('#messages').append(messageItem);
+                });
+            });            
+        </script>
+    </body>
+</html>

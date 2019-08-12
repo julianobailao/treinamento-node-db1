@@ -1,0 +1,16 @@
+{
+  "name": "treinamento",
+  "version": "1.0.0",
+  "description": "lalalala",
+  "main": "index.js",
+  "keywords": [
+    "treinamento"
+  ],
+  "author": "bailao",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-redis-pubsub": "^4.0.0",
+    "socket.io": "^2.2.0"
+  }
+}
